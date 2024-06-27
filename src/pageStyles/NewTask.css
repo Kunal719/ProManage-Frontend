@@ -1,0 +1,221 @@
+.dialog-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 650px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+.close-button {
+    /* Style your close button here (optional) */
+}
+
+.new-task-entry {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+
+.new-task-field {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    font-weight: 600;
+}
+
+.mandatory-field {
+    color: red;
+    margin-bottom: 5px;
+    margin-left: 3px;
+}
+
+.input-field {
+    width: 100%;
+    display: flex;
+    border: 1px solid #e2e2e2;
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, 0.2),
+        /* Inner shadow for depth */
+        0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.input-field input {
+    width: 100%;
+    height: 35px;
+    font-size: 15px;
+    outline: none;
+    padding: 8px 5px;
+    border: none;
+}
+
+.input-field input::placeholder {
+    font-family: 'Poppins',
+        'Open Sans',
+        sans-serif;
+}
+
+/* Select Priority Styles */
+.new-task-priority {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin-top: 5px;
+}
+
+.priority-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    font-size: 12px;
+    width: 135px;
+    text-wrap: nowrap;
+    padding: 0px 5px;
+    color: #767575;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.priority-option.selected {
+    background-color: #e2e2e2;
+}
+
+.small-circle-red {
+    width: 10px;
+    height: 10px;
+    background-color: #FF2473;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+.small-circle-blue {
+    width: 10px;
+    height: 10px;
+    background-color: #18B0FF;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+.small-circle-green {
+    width: 10px;
+    height: 10px;
+    background-color: #63C05B;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+.assign-task {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    text-wrap: nowrap;
+}
+
+.drop-down-menu {
+    display: flex;
+    width: 100%;
+    margin-left: 10px;
+}
+
+/* Tasks  */
+.tasks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    gap: 10px;
+    height: 100px;
+}
+
+/* CheckList Styles  */
+.checklist {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+
+.needScroll {
+    overflow-y: scroll;
+}
+
+.add-task-btn {
+    display: flex;
+    align-items: center;
+    color: grey;
+    cursor: pointer;
+}
+
+.add-task-btn img {
+    margin-right: 5px;
+}
+
+/* Footer buttons  */
+.footer-btns {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    /* justify-content: space-between; */
+    align-items: center;
+    bottom: 25px;
+}
+
+.due-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
+    height: 40px;
+    border: 1px solid #E2E2E2;
+    border-radius: 10px;
+    color: #767575;
+    cursor: pointer;
+    text-wrap: nowrap;
+    margin-right: 100px;
+}
+
+.react-datepicker-wrapper input[type="text"] {
+    border: none;
+    outline: none;
+    font-family: 'Poppins', 'Open Sans', sans-serif;
+    font-size: 14px;
+    text-align: center;
+}
+
+.action-btns {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cancel-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 175px;
+    height: 40px;
+    border: 1px solid #CF3636;
+    border-radius: 10px;
+    color: #CF3636;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.save-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #17A2B8;
+    width: 175px;
+    height: 40px;
+    /* border: 1px solid #CF3636; */
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+}

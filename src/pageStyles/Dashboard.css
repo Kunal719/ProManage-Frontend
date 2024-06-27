@@ -1,0 +1,119 @@
+.dashboard {
+    /* display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 5px 30px;
+    overflow-x: scroll; */
+    /* width: calc(-200px + 100vw); */
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    /* width: calc(-500px + 100vw); */
+    width: 100%;
+    overflow-x: hidden;
+    /* max-width: fit-content; */
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.header-left-base-content {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.header-left-base-content span {
+    font-size: 28px;
+    margin-right: 40px;
+    font-weight: 600;
+}
+
+.header-left-base-content p {
+    cursor: pointer;
+}
+
+.addBoardImg {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.date {
+    margin-right: 17px;
+}
+
+.dropdown-menu {
+    margin-top: 25px;
+    border: none;
+}
+
+.dropdown-menu:focus-visible {
+    border: none;
+}
+
+/* Task Boards */
+
+.parent-task-boards {
+    height: calc(-8.7rem + 100vh);
+}
+
+.task-boards {
+    /* display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px; */
+    height: calc(-8.7rem + 100vh);
+    display: flex;
+    /* overflow-x: scroll; */
+    padding: 0 2rem;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+/* Add People Dialog  */
+.dialog-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Black transparent layer */
+    z-index: 100;
+    /* Ensures the dialog is on top of other elements */
+}
+
+.dialog-content {
+    position: relative;
+    z-index: 2;
+}
+
+.dialog-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    z-index: 1;
+}

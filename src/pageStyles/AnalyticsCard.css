@@ -1,0 +1,32 @@
+.analytics-card {
+    width: 400px;
+    height: 250px;
+    border-radius: 15px;
+    background-color: #F9FCFF;
+    padding: 20px;
+    justify-content: flex-start;
+}
+
+.analytics-card p {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.analytics-values {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+}
+
+.small-circle-analytics {
+    width: 10px;
+    height: 10px;
+    background-color: #90C4CC;
+    border-radius: 100%;
+    margin-right: 10px;
+}

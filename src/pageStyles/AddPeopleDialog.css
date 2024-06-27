@@ -1,0 +1,80 @@
+.add-people-dialog-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 450px;
+    height: 150px;
+    position: relative;
+}
+
+.add-people-dialog-box-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.add-people-dialog-box-content p {
+    font-weight: 500;
+}
+
+.email-input {
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.email-input input {
+    width: 95%;
+    border: none;
+    outline: none;
+    height: 40px;
+    margin-left: 5px;
+}
+
+.email-input input::placeholder {
+    font-family: 'Poppins', 'Open-Sans', 'Serif';
+}
+
+.dialog-box-btns {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.cancel-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 175px; */
+    height: 40px;
+    border: 1px solid #CF3636;
+    border-radius: 10px;
+    color: #CF3636;
+    cursor: pointer;
+    margin-right: 20px;
+    width: 50%;
+}
+
+.save-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #17A2B8;
+    /* width: 175px; */
+    height: 40px;
+    /* border: 1px solid #CF3636; */
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    width: 50%;
+}
+
+.email-selected {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}

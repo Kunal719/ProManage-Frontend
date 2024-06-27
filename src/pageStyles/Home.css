@@ -1,0 +1,16 @@
+.general {
+    display: flex;
+}
+
+.general-dashboard {
+    display: flex;
+    overflow-x: scroll;
+}
+
+.home {
+    display: flex;
+    /* width: 100vw; */
+    max-height: 100vh;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}

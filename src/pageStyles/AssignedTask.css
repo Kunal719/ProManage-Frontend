@@ -1,0 +1,19 @@
+.assigned-task {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgb(226, 226, 226);
+    border-radius: 15px;
+    padding-left: 10px;
+    gap: 1rem;
+}
+
+.checkbox {
+    min-width: 15px;
+    min-height: 15px;
+    accent-color: #17A2B8;
+}
+
+.task {
+    color: black;
+    font-weight: 500;
+}

@@ -1,0 +1,9 @@
+.CalendarDropDown .react-select__control--is-focused .react-select__indicator-separator {
+    display: none;
+}
+
+.CalendarDropDown .react-select__control:hover,
+.react-select__control--is-focused,
+.react-select__control--is-selected {
+    outline: none;
+}

@@ -1,0 +1,22 @@
+.analytics-dashboard {
+    display: flex;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 6px 15px;
+    margin-left: 20px;
+}
+
+.analytics-dashboard p {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.analytics-cards {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2rem;
+}
