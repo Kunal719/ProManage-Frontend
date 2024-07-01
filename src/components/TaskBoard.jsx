@@ -11,6 +11,8 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [allTasks, setAllTasks] = useState([]);
 
+    const filteredTasks = allTasks.filter((task) => task.taskType === taskType);
+
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -36,8 +38,7 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
 
                     fetchedTasks.push(responseData.task);
                 }
-                const filteredTasks = fetchedTasks.filter((task) => task.taskType === taskType);
-                setAllTasks(filteredTasks);
+                setAllTasks(fetchedTasks);
             } catch (error) {
                 console.log(error);
             }
@@ -79,7 +80,7 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
                     {/* <TaskCard />
                     <TaskCard /> */}
 
-                    {allTasks.map((task) => (
+                    {filteredTasks.map((task) => (
                         <TaskCard key={task._id} task={task} taskType={taskType} /> // Pass the task object to TaskCard
                     ))}
                 </div>
@@ -87,7 +88,7 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
                 {isDialogOpen && (
                     <div className="dialog-container">
                         <div className="dialog-content">
-                            <NewTask handleNewTaskDialogClose={handleNewTaskDialogClose} />
+                            <NewTask setAllTasks={setAllTasks} handleNewTaskDialogClose={handleNewTaskDialogClose} />
                         </div>
                         <div className="dialog-overlay" onClick={handleNewTaskDialogClose} />
                     </div>

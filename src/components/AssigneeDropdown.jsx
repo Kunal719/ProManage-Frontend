@@ -34,7 +34,13 @@ const AssigneeDropdown = ({ onSelectOption }) => {
                         Authorization: `Bearer ${auth.token}`,
                     }
                 );
-                setOptions(responseData.emails);
+                if (responseData?.emails?.length > 0) {
+                    setOptions(responseData.emails);
+                }
+                else {
+                    setOptions([]);
+                }
+
             } catch (error) {
                 console.log(error);
             }

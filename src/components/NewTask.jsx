@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import TaskName from "./TaskName";
 import "../pageStyles/NewTask.css";
 
-const NewTask = ({ handleNewTaskDialogClose }) => {
+const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
     const [tasks, setTasks] = useState([]); // Array to store tasks
     const needScroll = tasks.length > 2;
     const [selectedPriority, setSelectedPriority] = useState(null);
@@ -56,9 +56,15 @@ const NewTask = ({ handleNewTaskDialogClose }) => {
                 }),
                 {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${auth.token}`,
+                    'Authorization': `Bearer ${auth.token}`,
                 }
             );
+
+            setAllTasks((allTasks) => [...allTasks, responseData.task]);
+            if (responseData.task) {
+                handleNewTaskDialogClose();
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -158,7 +164,7 @@ const NewTask = ({ handleNewTaskDialogClose }) => {
 
                 <div className="action-btns">
                     <div className="cancel-btn">Cancel</div>
-                    <div className="save-btn" onClick={() => { handleSaveNewTask(); handleNewTaskDialogClose(); }}>Save</div>
+                    <div className="save-btn" onClick={handleSaveNewTask}>Save</div>
                 </div>
             </div>
         </div>
