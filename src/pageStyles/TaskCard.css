@@ -26,12 +26,25 @@
     color: rgb(133, 133, 133);
 }
 
-.small-circle-red-task-card {
+.small-circle {
     width: 6px;
     height: 6px;
-    background-color: #FF2473;
     border-radius: 100%;
     margin-right: 5px;
+}
+
+.small-circle.red-task-card {
+    background-color: #FF2473;
+}
+
+.small-circle.blue-task-card {
+    background-color: #18B0FF;
+
+}
+
+.small-circle.green-task-card {
+    background-color: #63C05B;
+
 }
 
 .option-button {
@@ -144,4 +157,5 @@
     border: transparent;
     cursor: pointer;
     text-wrap: nowrap;
+    text-transform: uppercase;
 }

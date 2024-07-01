@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import CalendarDropDown from "./CalendarDropDown";
-import "../pageStyles/Dashboard.css";
 import TaskBoard from "./TaskBoard";
 import AddPeopleDialog from "./AddPeopleDialog";
+import { AuthContext } from "../context/auth-context";
+import { useHttpClient } from '../hooks/http-hook';
+import { day, month, year, ordinal } from '../util/getDate';
+import LoadingSpinner from "./LoadingSpinner";
 
+import "../pageStyles/Dashboard.css";
 const Dashboard = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
+    const [user, setUser] = useState({});
+
+    const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const handleDialogOpen = () => {
         setIsDialogOpen(true); // Open dialog on button click
@@ -15,30 +23,35 @@ const Dashboard = () => {
         setIsDialogOpen(false); // Close dialog on close button click or outside click (optional)
     };
 
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.toLocaleString('default', { month: 'long' }); // Get month name
-    const year = today.getFullYear();
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const responseData = await sendRequest(
+                    import.meta.env.VITE_REACT_APP_BACKEND_URL + `/users/${auth.userId}`,
+                    'GET',
+                    null,
+                )
 
-    // Add ordinal suffix (st, nd, rd, th)
-    const ordinal = (day % 10 === 1 && day !== 11)
-        ? 'st'
-        : (day % 10 === 2 && day !== 12)
-            ? 'nd'
-            : (day % 10 === 3 && day !== 13)
-                ? 'rd'
-                : 'th';
+                setUser(responseData.user)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getUser();
+    }, [auth.userId, auth.token, sendRequest])
 
+    // console.log(user.tasks);
 
     return (
         <>
             <section className="dashboard">
+                {isLoading && <LoadingSpinner asOverlay />}
                 {/* Header section */}
 
                 <div className="header">
                     {/* Left Side  */}
                     <div className="header-left">
-                        <h2>Welcome! Kumar</h2>
+                        <h2>Welcome! {user?.name}</h2>
                         <div className='header-left-base-content'>
                             <span>Board</span>
                             <img src="/images/addPeople.png" className="addBoardImg" alt="" onClick={handleDialogOpen} />
@@ -68,10 +81,10 @@ const Dashboard = () => {
                 {/* Content section */}
                 <div className='parent-task-boards'>
                     <div className="task-boards">
-                        <TaskBoard task="Backlog" />
-                        <TaskBoard task="To do" addBtn />
-                        <TaskBoard task="In Progress" />
-                        <TaskBoard task="Done" />
+                        <TaskBoard taskType="Backlog" tasks={user?.tasks} />
+                        <TaskBoard taskType="To do" addBtn tasks={user?.tasks} />
+                        <TaskBoard taskType="In Progress" tasks={user?.tasks} />
+                        <TaskBoard taskType="Done" tasks={user?.tasks} />
                     </div>
                 </div>
             </section>

@@ -1,9 +1,9 @@
 import "../pageStyles/AssignedTask.css";
-const AssignedTask = () => {
+const AssignedTask = ({ subTaskTitle, subTaskDone }) => {
     return (
         <div className="assigned-task">
-            <input type="checkbox" className="checkbox" />
-            <p className="task">Do more tasks</p>
+            <input type="checkbox" className="checkbox" value={subTaskDone} />
+            <p className="task">{subTaskTitle}</p>
         </div>
     )
 }

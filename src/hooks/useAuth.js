@@ -20,8 +20,8 @@ export const useAuth = () => {
             'userData',
             JSON.stringify({
                 userId: uid,
-                expiration: expirationTokenDate.toISOString(),
                 token: token,
+                expiration: expirationTokenDate.toISOString(),
             })
         );
     }, []);

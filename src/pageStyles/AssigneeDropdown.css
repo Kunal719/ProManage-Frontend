@@ -54,7 +54,7 @@
     /* Optional subtle 3D effect */
     z-index: 1;
     /* Ensure dropdown is above other elements */
-    height: 200px;
+    height: auto;
 }
 
 .needScroll {

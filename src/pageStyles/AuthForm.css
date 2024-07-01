@@ -43,6 +43,19 @@
     offset: 0;
     outline: none;
     outline-offset: none;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.password-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.password-view-icon {
+    cursor: pointer;
 }
 
 .submit-button {
