@@ -6,7 +6,7 @@ import GeneralDialogBox from "./GeneralDialogBox";
 import { format } from 'date-fns';
 import "../pageStyles/TaskCard.css";
 
-const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks }) => {
+const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, isStateCollapsed, setIsStateCollapsed }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isChecklistOpen, setIsChecklistOpen] = useState(false);
     const [subTasks, setSubTasks] = useState();
@@ -29,7 +29,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks })
     };
 
     const handleDialogClose = () => {
-        setIsDeleteDialogOpen(false); // Close dialog on close button click or outside click (optional)
+        setIsDeleteDialogOpen(false); // Close dialog on close button click
     };
 
     const handleClickOutside = (event) => {
@@ -92,7 +92,14 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks })
 
     useEffect(() => {
         setSubTasks(task?.checklist);
-    }, [task])
+    }, [task]);
+
+    useEffect(() => {
+        if (isStateCollapsed && isChecklistOpen) {
+            setIsChecklistOpen(false);
+            setIsStateCollapsed(false)
+        }
+    }, [isStateCollapsed, isChecklistOpen]);
 
     let formattedDate;
     if (task?.dueDate) formattedDate = format(task.dueDate, 'dd MMM');
@@ -114,17 +121,17 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks })
                             <p>Share</p>
                             <p onClick={handleOpenDialog} style={{ color: 'red' }}>Delete</p>
 
-                            {isDeleteDialogOpen && (
-                                <div className="dialog-container">
-                                    <div className="dialog-content">
-                                        <GeneralDialogBox type="delete" handleDialogClose={handleDialogClose} handleDelete={handleDelete} />
-                                    </div>
-                                    <div className="dialog-overlay" onClick={handleDialogClose} />
-                                </div>
-                            )}
                         </div>
                     )}
                 </div>
+                {isDeleteDialogOpen && (
+                    <div className="dialog-container">
+                        <div className="dialog-content">
+                            <GeneralDialogBox type="delete" handleDialogClose={handleDialogClose} handleDelete={handleDelete} />
+                        </div>
+                        <div className="dialog-overlay" onClick={handleDialogClose} />
+                    </div>
+                )}
             </div>
 
             <p className="task-title">{task?.title}</p>

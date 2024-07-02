@@ -11,6 +11,7 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [allTasks, setAllTasks] = useState([]);
     const [editTask, setEditTask] = useState(null);
+    const [isStateCollapsed, setIsStateCollapsed] = useState(false);
 
     // let filteredTasks = allTasks.filter((task) => task.taskType === taskType);
 
@@ -110,40 +111,6 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
         };
     }, [tasks, sendRequest, auth.token, taskType]);
 
-    // useEffect(() => {
-    //     if (filteredTasks) {
-    //         const filterTasks = () => {
-    //             const now = new Date();
-    //             let filteredTasksByCalendar;
-
-    //             if (selectedOption.value === 'Today') {
-    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
-    //                     const taskDate = new Date(task.dueDate);
-    //                     return taskDate.toDateString() === now.toDateString();
-    //                 });
-    //             } else if (selectedOption.value === 'This Week') {
-    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
-    //                     const taskDate = new Date(task.dueDate);
-    //                     const oneWeekFromNow = new Date();
-    //                     oneWeekFromNow.setDate(now.getDate() + 7);
-    //                     return taskDate >= now && taskDate <= oneWeekFromNow;
-    //                 });
-    //             } else if (selectedOption.value === 'This Month') {
-    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
-    //                     const taskDate = new Date(task.dueDate);
-    //                     const oneMonthFromNow = new Date();
-    //                     oneMonthFromNow.setDate(now.getDate() + 30);
-    //                     return taskDate >= now && taskDate <= oneMonthFromNow;
-    //                 });
-    //             }
-
-    //             filteredTasks = filteredTasksByCalendar;
-    //         };
-
-    //         filterTasks();
-    //     }
-    // }, [selectedOption]);
-
     return (
         <>
             <div className='task-board'>
@@ -156,14 +123,14 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
                             addBtn &&
                             <img src="/images/addBtn.png" className='add-btn' alt="Add Task" onClick={handleAddButtonClick} />
                         }
-                        <img src="/images/collapse-all.png" alt="Collapse" />
+                        <img src="/images/collapse-all.png" alt="Collapse" onClick={() => setIsStateCollapsed(true)} />
                     </div>
                 </div>
 
 
                 <div className="task-cards">
                     {filteredTasks.map((task) => (
-                        <TaskCard key={task._id} task={task} taskType={taskType} setEditTask={setEditTask} setIsDialogOpen={setIsDialogOpen} setAllTasks={setAllTasks} /> // Pass the task object to TaskCard
+                        <TaskCard key={task._id} task={task} taskType={taskType} setEditTask={setEditTask} setIsDialogOpen={setIsDialogOpen} setAllTasks={setAllTasks} isStateCollapsed={isStateCollapsed} setIsStateCollapsed={setIsStateCollapsed} /> // Pass the task object to TaskCard
                     ))}
                 </div>
 
