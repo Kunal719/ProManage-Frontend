@@ -21,8 +21,7 @@ const customStyles = {
     }),
 };
 
-const CalendarDropDown = () => {
-    const [selectedOption, setSelectedOption] = React.useState(options[1]); // Default selected
+const CalendarDropDown = ({ selectedOption, setSelectedOption }) => {
 
     const handleChange = (selected) => {
         setSelectedOption(selected);

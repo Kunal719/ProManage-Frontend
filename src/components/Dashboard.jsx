@@ -11,6 +11,7 @@ import "../pageStyles/Dashboard.css";
 const Dashboard = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [user, setUser] = useState({});
+    const [selectedOption, setSelectedOption] = useState({ value: 'This Week', label: 'This Week' });
 
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -39,8 +40,6 @@ const Dashboard = () => {
         };
         getUser();
     }, [auth.userId, auth.token, sendRequest])
-
-    // console.log(user.tasks);
 
     return (
         <>
@@ -73,7 +72,7 @@ const Dashboard = () => {
                     <div className="header-right">
                         <span className='date'>{day}{ordinal} {month}, {year}</span>
                         <div className='dropdown-menu'>
-                            <CalendarDropDown />
+                            <CalendarDropDown selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
                         </div>
                     </div>
                 </div>
@@ -81,10 +80,10 @@ const Dashboard = () => {
                 {/* Content section */}
                 <div className='parent-task-boards'>
                     <div className="task-boards">
-                        <TaskBoard taskType="Backlog" tasks={user?.tasks} />
-                        <TaskBoard taskType="To do" addBtn tasks={user?.tasks} />
-                        <TaskBoard taskType="In Progress" tasks={user?.tasks} />
-                        <TaskBoard taskType="Done" tasks={user?.tasks} />
+                        <TaskBoard taskType="Backlog" tasks={user?.tasks} selectedOption={selectedOption} />
+                        <TaskBoard taskType="To do" addBtn tasks={user?.tasks} selectedOption={selectedOption} />
+                        <TaskBoard taskType="In Progress" tasks={user?.tasks} selectedOption={selectedOption} />
+                        <TaskBoard taskType="Done" tasks={user?.tasks} selectedOption={selectedOption} />
                     </div>
                 </div>
             </section>

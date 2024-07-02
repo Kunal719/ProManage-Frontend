@@ -6,12 +6,13 @@ import { useHttpClient } from '../hooks/http-hook';
 
 import "../pageStyles/TaskBoard.css";
 
-const TaskBoard = ({ taskType, addBtn, tasks }) => {
+const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [allTasks, setAllTasks] = useState([]);
+    const [editTask, setEditTask] = useState(null);
 
-    const filteredTasks = allTasks.filter((task) => task.taskType === taskType);
+    let filteredTasks = allTasks.filter((task) => task.taskType === taskType);
 
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -57,7 +58,39 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
         };
     }, [tasks, sendRequest, auth.token, taskType]);
 
-    // console.log(allTasks);
+    useEffect(() => {
+        if (filteredTasks) {
+            const filterTasks = () => {
+                const now = new Date();
+                let filteredTasksByCalendar;
+
+                if (selectedOption.value === 'Today') {
+                    filteredTasksByCalendar = filteredTasks.filter(task => {
+                        const taskDate = new Date(task.dueDate);
+                        return taskDate.toDateString() === now.toDateString();
+                    });
+                } else if (selectedOption.value === 'This Week') {
+                    filteredTasksByCalendar = filteredTasks.filter(task => {
+                        const taskDate = new Date(task.dueDate);
+                        const oneWeekFromNow = new Date();
+                        oneWeekFromNow.setDate(now.getDate() + 7);
+                        return taskDate >= now && taskDate <= oneWeekFromNow;
+                    });
+                } else if (selectedOption.value === 'This Month') {
+                    filteredTasksByCalendar = filteredTasks.filter(task => {
+                        const taskDate = new Date(task.dueDate);
+                        const oneMonthFromNow = new Date();
+                        oneMonthFromNow.setDate(now.getDate() + 30);
+                        return taskDate >= now && taskDate <= oneMonthFromNow;
+                    });
+                }
+
+                filteredTasks = filteredTasksByCalendar;
+            };
+
+            filterTasks();
+        }
+    }, [selectedOption]);
 
     return (
         <>
@@ -77,18 +110,15 @@ const TaskBoard = ({ taskType, addBtn, tasks }) => {
 
 
                 <div className="task-cards">
-                    {/* <TaskCard />
-                    <TaskCard /> */}
-
                     {filteredTasks.map((task) => (
-                        <TaskCard key={task._id} task={task} taskType={taskType} /> // Pass the task object to TaskCard
+                        <TaskCard key={task._id} task={task} taskType={taskType} setEditTask={setEditTask} setIsDialogOpen={setIsDialogOpen} /> // Pass the task object to TaskCard
                     ))}
                 </div>
 
                 {isDialogOpen && (
                     <div className="dialog-container">
                         <div className="dialog-content">
-                            <NewTask setAllTasks={setAllTasks} handleNewTaskDialogClose={handleNewTaskDialogClose} />
+                            <NewTask setAllTasks={setAllTasks} handleNewTaskDialogClose={handleNewTaskDialogClose} editTask={editTask} />
                         </div>
                         <div className="dialog-overlay" onClick={handleNewTaskDialogClose} />
                     </div>

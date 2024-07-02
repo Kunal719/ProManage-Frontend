@@ -1,9 +1,9 @@
 import { useState } from "react";
 import "../pageStyles/TaskName.css";
 
-const TaskName = ({ onTaskChange, index, onDelete }) => {
-    const [taskText, setTaskText] = useState("");
-    const [isCompleted, setIsCompleted] = useState(false);
+const TaskName = ({ task, onTaskChange, index, onDelete }) => {
+    const [taskText, setTaskText] = useState(task?.title || "");
+    const [isCompleted, setIsCompleted] = useState(task?.done || false);
 
     const handleChange = (event) => {
         if (event.target.type === "text") {
@@ -16,6 +16,7 @@ const TaskName = ({ onTaskChange, index, onDelete }) => {
     const handleTaskUpdate = () => {
         onTaskChange({ title: taskText, done: isCompleted }, index);
     };
+
     return (
         <div className="task-name-field">
             <input type="checkbox" onChange={handleChange} checked={isCompleted} onBlur={handleTaskUpdate} />

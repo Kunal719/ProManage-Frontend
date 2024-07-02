@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback, useContext } from 'react';
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from '../hooks/http-hook';
 import "../pageStyles/AssigneeDropdown.css"
-const AssigneeDropdown = ({ onSelectOption }) => {
+const AssigneeDropdown = ({ selectedAssignee, onSelectOption }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedOption, setSelectedOption] = useState(selectedAssignee || null);
     const [options, setOptions] = useState([]);
 
 

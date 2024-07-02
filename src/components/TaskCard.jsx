@@ -5,15 +5,16 @@ import AssignedTask from "./AssignedTask";
 import { format } from 'date-fns';
 import "../pageStyles/TaskCard.css";
 
-const TaskCard = ({ task, taskType }) => {
+const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isChecklistOpen, setIsChecklistOpen] = useState(false);
+    const [subTasks, setSubTasks] = useState(task?.checklist);
     const buttonRef = useRef(null);
 
     // console.log(task);
 
-    const subTasks = task?.checklist;
-    const completedSubTasksCount = subTasks?.filter((subTask) => subTask?.isDone).length;
+    // const subTasks = task?.checklist;
+    const completedSubTasksCount = subTasks?.filter((subTask) => subTask?.done).length;
 
     let taskTypes = ["To do", "Backlog", "In Progress", "Done"];
     taskTypes = taskTypes.filter((type) => type !== taskType);
@@ -48,6 +49,11 @@ const TaskCard = ({ task, taskType }) => {
         }
     }
 
+    const handleEditButtonClick = () => {
+        setEditTask(task); // Set the task to be edited
+        setIsDialogOpen(true); // Open the dialog
+    };
+
     useEffect(() => {
         const closeOptionsMenu = () => handleClickOutside(event);
         document.addEventListener('click', closeOptionsMenu);
@@ -71,7 +77,7 @@ const TaskCard = ({ task, taskType }) => {
                     <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 512 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><circle cx="256" cy="256" r="48"></circle><circle cx="416" cy="256" r="48"></circle><circle cx="96" cy="256" r="48"></circle></svg>
                     {isOpen && (
                         <div className="options-menu">
-                            <p>Edit</p>
+                            <p onClick={handleEditButtonClick}>Edit</p>
                             <p>Share</p>
                             <p style={{ color: 'red' }}>Delete</p>
                         </div>
@@ -102,7 +108,11 @@ const TaskCard = ({ task, taskType }) => {
                 {/* Conditionally render checklist tasks only if isChecklistOpen is true */}
                 {isChecklistOpen &&
                     subTasks.map((subTask) => (
-                        <AssignedTask key={subTask._id} subTaskTitle={subTask.title} subTaskDone={subTask.done} />
+                        <AssignedTask
+                            key={subTask._id}
+                            subTaskTitle={subTask.title}
+                            subTaskDone={subTask.done}
+                        />
                     ))}
             </div>
 

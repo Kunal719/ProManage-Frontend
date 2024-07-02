@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import AssigneeDropdown from "./AssigneeDropdown";
 import DatePicker from "react-datepicker";
 import { AuthContext } from "../context/auth-context";
@@ -9,7 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import TaskName from "./TaskName";
 import "../pageStyles/NewTask.css";
 
-const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
+const NewTask = ({ setAllTasks, handleNewTaskDialogClose, editTask }) => {
     const [tasks, setTasks] = useState([]); // Array to store tasks
     const needScroll = tasks.length > 2;
     const [selectedPriority, setSelectedPriority] = useState(null);
@@ -43,10 +43,16 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
     };
 
     const handleSaveNewTask = async () => {
+        const url = editTask ?
+            import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/updateTask/${editTask._id}/` :
+            import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/${auth.userId}/createTask`;
+
+        const method = editTask ? 'PATCH' : 'POST';
+        let responseData;
         try {
-            const responseData = await sendRequest(
-                import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/${auth.userId}/createTask`,
-                'POST',
+            responseData = await sendRequest(
+                url,
+                method,
                 JSON.stringify({
                     title: taskTitle,
                     priority: selectedPriority,
@@ -60,7 +66,15 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
                 }
             );
 
-            setAllTasks((allTasks) => [...allTasks, responseData.task]);
+            if (!editTask) {
+                setAllTasks((allTasks) => [...allTasks, responseData.task]);
+            }
+            else {
+                setAllTasks((allTasks) =>
+                    allTasks.map((task) => (task._id === editTask._id ? responseData.task : task))
+                );
+            }
+
             if (responseData.task) {
                 handleNewTaskDialogClose();
             }
@@ -69,6 +83,16 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
             console.log(error);
         }
     };
+
+    useEffect(() => {
+        if (editTask) {
+            setTasks(editTask.checklist);
+            setSelectedPriority(editTask.priority || null);
+            setSelectedDate(editTask.dueDate ? new Date(editTask.dueDate) : null);
+            setSelectedAssignee(editTask.assignNow || "");
+            setTaskTitle(editTask.title || "");
+        }
+    }, [editTask]);
 
     console.log(tasks);
     return (
@@ -123,7 +147,7 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
                 </div>
 
                 <div className="drop-down-menu">
-                    <AssigneeDropdown onSelectOption={(option) => setSelectedAssignee(option)} />
+                    <AssigneeDropdown selectedAssignee={selectedAssignee} onSelectOption={(option) => setSelectedAssignee(option)} />
                 </div>
             </div>
 
@@ -141,6 +165,7 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose }) => {
                             onDelete={() => handleTaskDelete(index)} // Pass index for deletion
                             onTaskChange={handleTaskChange}
                             index={index}
+                            task={task}
                         />
                     ))}
                 </div>
