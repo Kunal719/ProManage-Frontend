@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
 import "../pageStyles/GeneralDialogBox.css";
 
-const GeneralDialogBox = ({ type, handleDialogClose }) => {
+const GeneralDialogBox = ({ type, handleDialogClose, handleDelete }) => {
     const auth = useContext(AuthContext);
     const navigate = useNavigate();
     const handleLogout = () => {
@@ -18,7 +18,7 @@ const GeneralDialogBox = ({ type, handleDialogClose }) => {
             <div className="general-dialog-box-content">
                 <p>{type === 'logout' ? 'Are you sure you want to Logout?' : 'Are you sure you want to Delete?'}</p>
                 <div className="general-dialog-box-btns">
-                    <div className="general-action-button" onClick={handleLogout}>
+                    <div className="general-action-button" onClick={type === 'logout' ? handleLogout : handleDelete}>
                         {type === 'logout' ? 'Yes, Logout' : 'Yes, Delete'}
                     </div>
                     <div className="general-cancel-button" onClick={handleDialogClose}>Cancel</div>

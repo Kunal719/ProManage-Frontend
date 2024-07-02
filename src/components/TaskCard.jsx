@@ -2,13 +2,15 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from "../hooks/http-hook";
 import AssignedTask from "./AssignedTask";
+import GeneralDialogBox from "./GeneralDialogBox";
 import { format } from 'date-fns';
 import "../pageStyles/TaskCard.css";
 
-const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
+const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isChecklistOpen, setIsChecklistOpen] = useState(false);
-    const [subTasks, setSubTasks] = useState(task?.checklist);
+    const [subTasks, setSubTasks] = useState();
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const buttonRef = useRef(null);
 
     // console.log(task);
@@ -22,11 +24,20 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
+    const handleOpenDialog = () => {
+        setIsDeleteDialogOpen(true); // Open dialog on button click
+    };
+
+    const handleDialogClose = () => {
+        setIsDeleteDialogOpen(false); // Close dialog on close button click or outside click (optional)
+    };
+
     const handleClickOutside = (event) => {
         if (event.target !== buttonRef.current && !event.target.closest('.task-card')) {
             setIsOpen(false);
         }
     };
+
     const handleSwitchTaskType = async (newTaskType) => {
         try {
             await sendRequest(
@@ -54,12 +65,34 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
         setIsDialogOpen(true); // Open the dialog
     };
 
+    const handleDelete = async () => {
+        try {
+            await sendRequest(
+                import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/deleteTask/${task._id}`,
+                'DELETE',
+                null,
+                {
+                    'Authorization': `Bearer ${auth.token}`
+                }
+            )
+
+            // Filter out deleted task
+            setAllTasks((allTasks) => allTasks.filter((deletedTask) => (deletedTask._id !== task._id)))
+        } catch (error) {
+
+        }
+    }
+
     useEffect(() => {
         const closeOptionsMenu = () => handleClickOutside(event);
         document.addEventListener('click', closeOptionsMenu);
 
         return () => document.removeEventListener('click', closeOptionsMenu);
     }, [isOpen]);
+
+    useEffect(() => {
+        setSubTasks(task?.checklist);
+    }, [task])
 
     let formattedDate;
     if (task?.dueDate) formattedDate = format(task.dueDate, 'dd MMM');
@@ -79,7 +112,16 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
                         <div className="options-menu">
                             <p onClick={handleEditButtonClick}>Edit</p>
                             <p>Share</p>
-                            <p style={{ color: 'red' }}>Delete</p>
+                            <p onClick={handleOpenDialog} style={{ color: 'red' }}>Delete</p>
+
+                            {isDeleteDialogOpen && (
+                                <div className="dialog-container">
+                                    <div className="dialog-content">
+                                        <GeneralDialogBox type="delete" handleDialogClose={handleDialogClose} handleDelete={handleDelete} />
+                                    </div>
+                                    <div className="dialog-overlay" onClick={handleDialogClose} />
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -110,8 +152,11 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen }) => {
                     subTasks.map((subTask) => (
                         <AssignedTask
                             key={subTask._id}
-                            subTaskTitle={subTask.title}
-                            subTaskDone={subTask.done}
+                            subTaskTitle={subTask?.title}
+                            subTaskDone={subTask?.done}
+                            setSubTasks={setSubTasks}
+                            subTaskId={subTask?._id}
+                            task={task}
                         />
                     ))}
             </div>

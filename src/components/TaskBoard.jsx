@@ -12,7 +12,59 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
     const [allTasks, setAllTasks] = useState([]);
     const [editTask, setEditTask] = useState(null);
 
-    let filteredTasks = allTasks.filter((task) => task.taskType === taskType);
+    // let filteredTasks = allTasks.filter((task) => task.taskType === taskType);
+
+    const getFilteredTasks = () => {
+        let updatedTasks = allTasks.filter((task) => task.taskType === taskType);
+
+        if (selectedOption) {
+            updatedTasks = updatedTasks.filter((task) => {
+                const now = new Date();
+                const startOfToday = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate()
+                ).getTime();
+                const endOfToday = startOfToday + (24 * 60 * 60 * 1000 - 1);
+                const endOfOneWeek = startOfToday + (7 * 24 * 60 * 60 * 1000 - 1);
+                const endOfOneMonth = startOfToday + (30 * 24 * 60 * 60 * 1000 - 1);
+
+                if (!task.dueDate) {
+                    return true;
+                }
+
+                const taskDueDate = new Date(task.dueDate).getTime();
+
+                if (selectedOption.value === "Today") {
+                    if (taskDueDate >= startOfToday && taskDueDate <= endOfToday) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (selectedOption.value === "This Week") {
+                    if (taskDueDate >= startOfToday && taskDueDate <= endOfOneWeek) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (selectedOption.value === "This Month") {
+                    if (taskDueDate >= startOfToday && taskDueDate <= endOfOneMonth) {
+                        return true;
+                    }
+
+                    return false;
+                }
+            });
+        }
+
+        return updatedTasks;
+    };
+
+    let filteredTasks = getFilteredTasks();
 
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -58,39 +110,39 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
         };
     }, [tasks, sendRequest, auth.token, taskType]);
 
-    useEffect(() => {
-        if (filteredTasks) {
-            const filterTasks = () => {
-                const now = new Date();
-                let filteredTasksByCalendar;
+    // useEffect(() => {
+    //     if (filteredTasks) {
+    //         const filterTasks = () => {
+    //             const now = new Date();
+    //             let filteredTasksByCalendar;
 
-                if (selectedOption.value === 'Today') {
-                    filteredTasksByCalendar = filteredTasks.filter(task => {
-                        const taskDate = new Date(task.dueDate);
-                        return taskDate.toDateString() === now.toDateString();
-                    });
-                } else if (selectedOption.value === 'This Week') {
-                    filteredTasksByCalendar = filteredTasks.filter(task => {
-                        const taskDate = new Date(task.dueDate);
-                        const oneWeekFromNow = new Date();
-                        oneWeekFromNow.setDate(now.getDate() + 7);
-                        return taskDate >= now && taskDate <= oneWeekFromNow;
-                    });
-                } else if (selectedOption.value === 'This Month') {
-                    filteredTasksByCalendar = filteredTasks.filter(task => {
-                        const taskDate = new Date(task.dueDate);
-                        const oneMonthFromNow = new Date();
-                        oneMonthFromNow.setDate(now.getDate() + 30);
-                        return taskDate >= now && taskDate <= oneMonthFromNow;
-                    });
-                }
+    //             if (selectedOption.value === 'Today') {
+    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
+    //                     const taskDate = new Date(task.dueDate);
+    //                     return taskDate.toDateString() === now.toDateString();
+    //                 });
+    //             } else if (selectedOption.value === 'This Week') {
+    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
+    //                     const taskDate = new Date(task.dueDate);
+    //                     const oneWeekFromNow = new Date();
+    //                     oneWeekFromNow.setDate(now.getDate() + 7);
+    //                     return taskDate >= now && taskDate <= oneWeekFromNow;
+    //                 });
+    //             } else if (selectedOption.value === 'This Month') {
+    //                 filteredTasksByCalendar = filteredTasks.filter(task => {
+    //                     const taskDate = new Date(task.dueDate);
+    //                     const oneMonthFromNow = new Date();
+    //                     oneMonthFromNow.setDate(now.getDate() + 30);
+    //                     return taskDate >= now && taskDate <= oneMonthFromNow;
+    //                 });
+    //             }
 
-                filteredTasks = filteredTasksByCalendar;
-            };
+    //             filteredTasks = filteredTasksByCalendar;
+    //         };
 
-            filterTasks();
-        }
-    }, [selectedOption]);
+    //         filterTasks();
+    //     }
+    // }, [selectedOption]);
 
     return (
         <>
@@ -111,7 +163,7 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
 
                 <div className="task-cards">
                     {filteredTasks.map((task) => (
-                        <TaskCard key={task._id} task={task} taskType={taskType} setEditTask={setEditTask} setIsDialogOpen={setIsDialogOpen} /> // Pass the task object to TaskCard
+                        <TaskCard key={task._id} task={task} taskType={taskType} setEditTask={setEditTask} setIsDialogOpen={setIsDialogOpen} setAllTasks={setAllTasks} /> // Pass the task object to TaskCard
                     ))}
                 </div>
 

@@ -17,6 +17,8 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose, editTask }) => {
     const [selectedAssignee, setSelectedAssignee] = useState("");
     const [taskTitle, setTaskTitle] = useState("");
 
+    const completedSubTasksCount = tasks?.filter((task) => task?.done).length;
+
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -154,7 +156,7 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose, editTask }) => {
             {/* New Tasks Checklist  */}
             <div className="checklist">
                 <div className="new-task-field">
-                    <p>Checklist (0/0)</p>
+                    <p>Checklist ({completedSubTasksCount}/{tasks.length})</p>
                     <span className='mandatory-field'>*</span>
                 </div>
 
