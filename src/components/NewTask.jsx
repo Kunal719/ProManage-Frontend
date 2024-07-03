@@ -190,7 +190,7 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose, editTask }) => {
                 </div>
 
                 <div className="action-btns">
-                    <div className="cancel-btn">Cancel</div>
+                    <div className="cancel-btn" onClick={handleNewTaskDialogClose}>Cancel</div>
                     <div className="save-btn" onClick={handleSaveNewTask}>Save</div>
                 </div>
             </div>

@@ -12,11 +12,12 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
     const [allTasks, setAllTasks] = useState([]);
     const [editTask, setEditTask] = useState(null);
     const [isStateCollapsed, setIsStateCollapsed] = useState(false);
-
     // let filteredTasks = allTasks.filter((task) => task.taskType === taskType);
 
     const getFilteredTasks = () => {
         let updatedTasks = allTasks.filter((task) => task.taskType === taskType);
+
+        // console.log(selectedOption);
 
         if (selectedOption) {
             updatedTasks = updatedTasks.filter((task) => {
@@ -27,33 +28,33 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
                     now.getDate()
                 ).getTime();
                 const endOfToday = startOfToday + (24 * 60 * 60 * 1000 - 1);
-                const endOfOneWeek = startOfToday + (7 * 24 * 60 * 60 * 1000 - 1);
-                const endOfOneMonth = startOfToday + (30 * 24 * 60 * 60 * 1000 - 1);
+                const endOfOneWeek = startOfToday - (7 * 24 * 60 * 60 * 1000 - 1);
+                const endOfOneMonth = startOfToday - (30 * 24 * 60 * 60 * 1000 - 1);
 
-                if (!task.dueDate) {
-                    return true;
-                }
+                // if (!task.dueDate) {
+                //     return true;
+                // }
 
-                const taskDueDate = new Date(task.dueDate).getTime();
+                const taskCreatedDate = new Date(task.createdAt).getTime();
 
-                if (selectedOption.value === "Today") {
-                    if (taskDueDate >= startOfToday && taskDueDate <= endOfToday) {
+                if (selectedOption === "Today") {
+                    if (taskCreatedDate >= startOfToday && taskCreatedDate <= endOfToday) {
                         return true;
                     }
 
                     return false;
                 }
 
-                if (selectedOption.value === "This Week") {
-                    if (taskDueDate >= startOfToday && taskDueDate <= endOfOneWeek) {
+                if (selectedOption === "This Week") {
+                    if (taskCreatedDate <= endOfToday && taskCreatedDate >= endOfOneWeek) {
                         return true;
                     }
 
                     return false;
                 }
 
-                if (selectedOption.value === "This Month") {
-                    if (taskDueDate >= startOfToday && taskDueDate <= endOfOneMonth) {
+                if (selectedOption === "This Month") {
+                    if (taskCreatedDate <= endOfToday && taskCreatedDate >= endOfOneMonth) {
                         return true;
                     }
 

@@ -3,7 +3,7 @@ import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from "../hooks/http-hook";
 import LoadingSpinner from "./LoadingSpinner";
 import "../pageStyles/AssignedTask.css";
-const AssignedTask = ({ subTaskTitle, subTaskDone, setSubTasks, subTaskId, task }) => {
+const AssignedTask = ({ subTaskTitle, subTaskDone, setSubTasks, subTaskId, task, isShare }) => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
@@ -31,7 +31,7 @@ const AssignedTask = ({ subTaskTitle, subTaskDone, setSubTasks, subTaskId, task 
     return (
         <div className="assigned-task">
             {isLoading && <LoadingSpinner asOverlay />}
-            <input type="checkbox" className="checkbox" checked={subTaskDone} onChange={handleChange} />
+            <input type="checkbox" className="checkbox" checked={subTaskDone} onChange={handleChange} disabled={isShare} />
             <p className="task">{subTaskTitle}</p>
         </div>
     )

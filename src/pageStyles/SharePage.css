@@ -1,0 +1,98 @@
+.center-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.share-task-card {
+    background-color: white;
+    margin: 1rem 0px;
+    padding: 1rem;
+    height: auto;
+    width: 400px;
+    border-radius: 20px;
+    align-items: center;
+    border: 1px solid lightgrey;
+}
+
+.task-priority {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+}
+
+.task-priority p {
+    text-transform: uppercase;
+    font-size: 11px;
+    color: rgb(133, 133, 133);
+}
+
+.small-circle {
+    width: 6px;
+    height: 6px;
+    border-radius: 100%;
+    margin-right: 5px;
+}
+
+.small-circle.red-task-card {
+    background-color: #FF2473;
+}
+
+.small-circle.blue-task-card {
+    background-color: #18B0FF;
+
+}
+
+.small-circle.green-task-card {
+    background-color: #63C05B;
+
+}
+
+.task-title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 500;
+    margin-bottom: 1.8rem;
+    width: 60%;
+}
+
+.share-checklist-tasks {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: 300px;
+    gap: 10px;
+}
+
+.share-checklist-tasks.scroll {
+    overflow-y: scroll;
+    /* Reduce scrollbar thickness (optional) */
+    scrollbar-color: rgba(0, 0, 0, 0.5);
+    /* Set scrollbar track color (optional) */
+    scroll-margin: 10px;
+    scrollbar-width: none;
+}
+
+.share-task-info {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.share-task-due-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fc3939;
+    width: 80px;
+    height: 30px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+}

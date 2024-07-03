@@ -4,6 +4,9 @@ import { useHttpClient } from "../hooks/http-hook";
 import AssignedTask from "./AssignedTask";
 import GeneralDialogBox from "./GeneralDialogBox";
 import { format } from 'date-fns';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import "../pageStyles/TaskCard.css";
 
 const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, isStateCollapsed, setIsStateCollapsed }) => {
@@ -12,6 +15,11 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
     const [subTasks, setSubTasks] = useState();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const buttonRef = useRef(null);
+
+    const shareLink = `http://localhost:5173/share/${task._id}`;
+    const handleShareClick = () => {
+        toast.success("Link Copied!"); // Display toast notification
+    };
 
     // console.log(task);
 
@@ -103,7 +111,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
 
     let formattedDate;
     if (task?.dueDate) formattedDate = format(task.dueDate, 'dd MMM');
-
+    const isOverdue = taskType !== 'Done' && task?.dueDate && new Date(task?.dueDate) < new Date();
 
     return (
         <div className="task-card">
@@ -118,7 +126,9 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
                     {isOpen && (
                         <div className="options-menu">
                             <p onClick={handleEditButtonClick}>Edit</p>
-                            <p>Share</p>
+                            <CopyToClipboard text={shareLink} onCopy={handleShareClick}>
+                                <p>Share</p>
+                            </CopyToClipboard>
                             <p onClick={handleOpenDialog} style={{ color: 'red' }}>Delete</p>
 
                         </div>
@@ -169,7 +179,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
             </div>
 
             <div className="task-info">
-                {task?.dueDate ? <span className='task-due-date'>{formattedDate}</span> : <span></span>}
+                {task?.dueDate ? <span className={`task-due-date ${isOverdue ? 'overdue' : (taskType === 'Done' && 'done')}`}>{formattedDate}</span> : <span></span>}
 
                 <div className="switch-boards">
                     {/* Filter the button which is of taskType and show rest of them */}

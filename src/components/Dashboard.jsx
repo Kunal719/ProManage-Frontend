@@ -11,7 +11,7 @@ import "../pageStyles/Dashboard.css";
 const Dashboard = () => {
     const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage dialog visibility
     const [user, setUser] = useState({});
-    const [selectedOption, setSelectedOption] = useState({ value: 'This Week', label: 'This Week' });
+    const [selectedOption, setSelectedOption] = useState('This Week');
 
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();

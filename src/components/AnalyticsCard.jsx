@@ -1,50 +1,97 @@
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from "../context/auth-context";
+import { useHttpClient } from '../hooks/http-hook';
+import LoadingSpinner from "./LoadingSpinner";
 import "../pageStyles/AnalyticsCard.css";
 
 const AnalyticsCard = ({ type }) => {
-    const tasksNames = ['Backlog Tasks', 'To-do Tasks', 'In-Progress Tasks', 'Completed Tasks']
-    const taskNamesValues = [10, 11, 12, 13];
+    // Removed commented-out task names and values
 
-    const priorityNames = ['Low Priority', 'Moderate Priority', 'High Priority', 'Due Date Tasks'];
-    const priorityValues = [2, 3, 4, 5];
+    const [taskCounts, setTaskCounts] = useState({
+        taskStatusCounts: [],
+        taskPriorityCounts: {},
+    });
+
+    const { taskTypeCount = {}, priorityTypeCount = {}, DueDate } = taskCounts;
+
+
+    const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    useEffect(() => {
+        const getCount = async () => {
+            const responseData = await sendRequest(
+                import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/${auth.userId}/getStatusPriorityCount`,
+                'GET',
+                null,
+                {
+                    'Authorization': `Bearer ${auth.token}`
+                }
+            );
+            setTaskCounts(responseData);
+        };
+
+        getCount();
+    }, [auth.token]);
+
+    console.log(taskCounts)
     return (
         <div className="analytics-card">
+            {isLoading && <LoadingSpinner asOverlay />}
             <div className="analytics-values">
                 <div>
-
-                    {type === 'tasks' ? tasksNames.map((name, index) => {
-                        return (
-                            <div key={index} className='list-item'>
-                                <div className="small-circle-analytics" />
-                                <p key={index}>{name}</p>
-                            </div>
-                        )
-                    }) : priorityNames.map((name, index) => {
-                        return (
-                            <div key={index} className='list-item'>
-                                <div className="small-circle-analytics" />
-                                <p key={index}>{name}</p>
-                            </div>
-                        )
-                    })}
+                    {type === 'tasks' ? (
+                        Object.entries(taskTypeCount).map(([name, count], index) => {
+                            return (
+                                <div key={index} className='list-item'>
+                                    <div className="small-circle-analytics" />
+                                    <p key={index}>{name}</p>
+                                </div>
+                            );
+                        })
+                    ) : null}
+                    {type === 'priorities' ? (
+                        <div>
+                            {Object.entries(priorityTypeCount).map(([name, count], index) => {
+                                return (
+                                    <div key={index} className='list-item'>
+                                        <div className="small-circle-analytics" />
+                                        <p key={index}>{name}</p>
+                                    </div>
+                                );
+                            })}
+                            {DueDate ? <div className="list-item"><div className="small-circle-analytics" /><p>Due Date</p></div> : null}
+                        </div>
+                    ) : null}
                 </div>
                 <div>
-                    {type === 'tasks' ? taskNamesValues.map((value, index) => {
-                        return (
-                            <div key={index} className="list-item">
-                                <p style={{ fontWeight: 600 }} key={index}>{value}</p>
-                            </div>
-                        )
-                    }) : priorityValues.map((value, index) => {
-                        return (
-                            <div key={index} className="list-item">
-                                <p style={{ fontWeight: 600 }} key={index}>{value}</p>
-                            </div>
-                        )
-                    })}
+                    {type === 'tasks' ? (
+                        Object.entries(taskTypeCount).map(([name, count], index) => {
+                            return (
+                                <div key={index} className="list-item">
+                                    <p style={{ fontWeight: 600 }} key={index}>{count}</p>
+                                </div>
+                            );
+                        })
+                    ) : null}
+                    {type === 'priorities' ? (
+                        <div>
+                            {Object.entries(priorityTypeCount).map(([name, count], index) => {
+                                return (
+                                    <div key={index} className="list-item">
+                                        <p style={{ fontWeight: 600 }} key={index}>{count}</p>
+                                    </div>
+                                );
+                            })}
+                            {DueDate ? <div className="list-item"><p style={{ fontWeight: 600 }}>{DueDate}</p></div> : null}
+                        </div>
+
+                    ) : null}
                 </div>
             </div>
         </div>
-    )
+        // <div>Hello</div>
+    );
 }
 
-export default AnalyticsCard
+export default AnalyticsCard;

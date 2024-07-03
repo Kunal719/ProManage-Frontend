@@ -141,6 +141,20 @@
     color: black;
 }
 
+/* Due date for To Do, Backlog, In Progress tasks */
+.task-due-date.overdue {
+    background-color: #FF2473;
+    /* Adjust red shade as needed */
+    color: white;
+}
+
+/* Due date for Done task */
+.task-due-date.done {
+    background-color: rgb(4, 197, 4);
+    /* Adjust green shade as needed */
+    color: white;
+}
+
 .switch-boards {
     display: flex;
     align-items: center;

@@ -3,8 +3,11 @@ import Auth from "./pages/Auth";
 import Home from "./pages/Home";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import SharePage from "./pages/SharePage";
 import { AuthContext } from './context/auth-context';
 import { Suspense } from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoadingSpinner from "./components/LoadingSpinner";
 
 import { useAuth } from "./hooks/useAuth";
@@ -20,12 +23,14 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route exact path='/analytics' element={<Analytics />} />
         <Route exact path="/settings" element={<Settings />} />
+        <Route exact path="/share/:taskID" element={<SharePage />} />
       </Routes>
     );
   } else {
     routes = (
       <Routes>
         <Route exact path="/auth" element={<Auth />} />
+        <Route exact path="/share/:taskID" element={<SharePage />} />
         <Route path="*" element={<Auth />} />
       </Routes>
     );
@@ -50,6 +55,7 @@ function App() {
               </div>
             }
           >
+            <ToastContainer />
             {routes}
           </Suspense>
         </main>
