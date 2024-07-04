@@ -84,7 +84,6 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
                     'Authorization': `Bearer ${auth.token}`
                 }
             )
-
             // Filter out deleted task
             setAllTasks((allTasks) => allTasks.filter((deletedTask) => (deletedTask._id !== task._id)))
             if (responseData) {
@@ -183,6 +182,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
                 {isDeleteDialogOpen && (
                     <div className="dialog-container">
                         <div className="dialog-content">
+                            {error && <p style={{ color: 'red', fontWeight: 'bold', fontSize: '8px' }}>{error}</p>}
                             <GeneralDialogBox type="delete" handleDialogClose={handleDialogClose} handleDelete={handleDelete} />
                         </div>
                         <div className="dialog-overlay" onClick={handleDialogClose} />
