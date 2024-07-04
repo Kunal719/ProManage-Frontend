@@ -9,7 +9,8 @@ import "../pageStyles/SharePage.css"
 const SharePage = () => {
     const [task, setTask] = useState();
     const [subTasks, setSubTasks] = useState();
-    const { taskID } = useParams();
+    const { taskId } = useParams();
+    console.log(taskId);
 
     const needScroll = subTasks?.length > 4;
 
@@ -21,7 +22,7 @@ const SharePage = () => {
         const fetchTask = async () => {
             try {
                 const responseData = await sendRequest(
-                    import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/${taskID}`,
+                    import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/${taskId}`,
                     "GET",
                     null,
                     {}
@@ -33,7 +34,7 @@ const SharePage = () => {
             }
         };
         fetchTask();
-    }, [taskID, sendRequest]);
+    }, [taskId, sendRequest]);
 
     let formattedDate;
     if (task?.dueDate) formattedDate = format(task.dueDate, 'dd MMM');

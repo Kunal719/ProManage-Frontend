@@ -21,16 +21,16 @@ function App() {
     routes = (
       <Routes>
         <Route exact path='/' element={<Home />} />
+        <Route exact path="/share/:taskId" element={<SharePage />} />
         <Route exact path='/analytics' element={<Analytics />} />
         <Route exact path="/settings" element={<Settings />} />
-        <Route exact path="/share/:taskID" element={<SharePage />} />
       </Routes>
     );
   } else {
     routes = (
       <Routes>
+        <Route exact path="/share/:taskId" element={<SharePage />} />
         <Route exact path="/auth" element={<Auth />} />
-        <Route exact path="/share/:taskID" element={<SharePage />} />
         <Route path="*" element={<Auth />} />
       </Routes>
     );

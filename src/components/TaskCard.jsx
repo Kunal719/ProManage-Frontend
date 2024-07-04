@@ -20,7 +20,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
     const buttonRef = useRef(null);
 
 
-    const shareLink = `https://pro-manage-frontend-wine.vercel.app//share/${task._id}`;
+    const shareLink = `https://pro-manage-frontend-wine.vercel.app/share/${task._id}`;
     const handleShareClick = () => {
         toast.success("Link Copied!"); // Display toast notification
     };
