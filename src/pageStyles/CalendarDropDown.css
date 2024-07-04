@@ -22,6 +22,5 @@
     /* background-color: white; */
     font-size: 14px;
     outline: none;
-    z-index: -1;
     overflow: hidden !important;
 }

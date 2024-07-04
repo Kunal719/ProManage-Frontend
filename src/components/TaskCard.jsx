@@ -14,16 +14,16 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
     const [isChecklistOpen, setIsChecklistOpen] = useState(false);
     const [subTasks, setSubTasks] = useState();
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [assigneeEmails, setAssigneeEmails] = useState([]);
+    const [showEmail, setShowEmail] = useState(null);
     const buttonRef = useRef(null);
+
 
     const shareLink = `http://localhost:5173/share/${task._id}`;
     const handleShareClick = () => {
         toast.success("Link Copied!"); // Display toast notification
     };
 
-    // console.log(task);
-
-    // const subTasks = task?.checklist;
     const completedSubTasksCount = subTasks?.filter((subTask) => subTask?.done).length;
 
     let taskTypes = ["To do", "Backlog", "In Progress", "Done"];
@@ -92,6 +92,28 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
     }
 
     useEffect(() => {
+        const getAssigneeEmails = async () => {
+
+            try {
+                const assigneeEmails = await sendRequest(
+                    import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/getAssigneeEmailsByTask/${task._id}`,
+                    'GET',
+                    null,
+                    {
+                        'Authorization': `Bearer ${auth.token}`
+                    }
+                );
+                setAssigneeEmails(assigneeEmails.assigneeEmails);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        getAssigneeEmails();
+        console.log(assigneeEmails)
+    }, []);
+
+    useEffect(() => {
         const closeOptionsMenu = () => handleClickOutside(event);
         document.addEventListener('click', closeOptionsMenu);
 
@@ -119,6 +141,22 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
                 <div className="task-priority">
                     <div className={`small-circle ${task?.priority === 'High' ? 'red-task-card' : task?.priority === 'Moderate' ? 'blue-task-card' : 'green-task-card'}`} />
                     <p>{task?.priority}</p>
+
+
+                    {/* Show Assignee Email id with first 2 letters of email in capital inside a circle */}
+                    {assigneeEmails && assigneeEmails.length > 0 && (
+                        <div className="task-assignee">
+                            {assigneeEmails.map((assigneeEmail, index) => (
+                                <div key={index} className="task-assignee-email" onMouseEnter={() => setShowEmail(assigneeEmail)}
+                                    onMouseLeave={() => setShowEmail(null)}>
+                                    <p>{assigneeEmail.substring(0, 2).toUpperCase()}</p>
+                                    {showEmail === assigneeEmail && (
+                                        <div className="email-overlay">{assigneeEmail}</div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="option-button" onClick={() => { setIsOpen(!isOpen) }} ref={buttonRef}>
