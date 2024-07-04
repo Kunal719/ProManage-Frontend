@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from '../hooks/http-hook';
 import LoadingSpinner from "./LoadingSpinner";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import '../pageStyles/AuthForm.css'; // Import CSS file
 
 const AuthForm = ({ type }) => {
@@ -41,6 +43,7 @@ const AuthForm = ({ type }) => {
 
                 // if response is not an error
                 auth.login(responseData.user.userID, responseData.token);
+                toast.success("Login Successful!");
                 navigate('/');
             } catch (error) {
                 console.log(error);
@@ -64,6 +67,7 @@ const AuthForm = ({ type }) => {
 
                 // if response is not an error
                 auth.login(responseData.user.userID, responseData.token);
+                toast.success("Registration Successful!");
                 navigate('/');
             } catch (error) {
                 console.log(error);

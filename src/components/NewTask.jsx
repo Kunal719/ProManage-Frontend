@@ -3,6 +3,8 @@ import AssigneeDropdown from "./AssigneeDropdown";
 import DatePicker from "react-datepicker";
 import { AuthContext } from "../context/auth-context";
 import { useHttpClient } from '../hooks/http-hook';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS
 import LoadingSpinner from "./LoadingSpinner";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -77,8 +79,20 @@ const NewTask = ({ setAllTasks, handleNewTaskDialogClose, editTask }) => {
                 );
             }
 
-            if (responseData.task) {
+            setTasks([]);
+            setSelectedPriority(null);
+            setSelectedDate(null);
+            setSelectedAssignee("");
+            setTaskTitle("");
+
+            if (responseData) {
                 handleNewTaskDialogClose();
+                if (method === 'POST') {
+                    toast.success('Task created successfully');
+                }
+                else if (method === 'PATCH') {
+                    toast.success('Task updated successfully');
+                };
             }
 
         } catch (error) {

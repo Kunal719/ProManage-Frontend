@@ -69,6 +69,7 @@ const EditAccount = () => {
         <div className="edit-account">
             {isLoading && <LoadingSpinner asOverlay />}
             <p>Settings</p>
+            {error !== 'signal is aborted without reason' && <p>{error}</p>}
             <form onSubmit={handleUpdateUser}>
                 <div className="settings-input-container">
                     <img src="/images/nameAvatar.PNG" alt="Name" />

@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import CSS
+import LoadingSpinner from "./LoadingSpinner";
 import "../pageStyles/TaskCard.css";
 
 const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, isStateCollapsed, setIsStateCollapsed }) => {
@@ -75,7 +76,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
 
     const handleDelete = async () => {
         try {
-            await sendRequest(
+            const responseData = await sendRequest(
                 import.meta.env.VITE_REACT_APP_BACKEND_URL + `/user/tasks/deleteTask/${task._id}`,
                 'DELETE',
                 null,
@@ -86,6 +87,10 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
 
             // Filter out deleted task
             setAllTasks((allTasks) => allTasks.filter((deletedTask) => (deletedTask._id !== task._id)))
+            if (responseData) {
+                toast.success("Task Deleted!");
+            }
+
         } catch (error) {
 
         }
@@ -109,8 +114,10 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
             }
         };
 
-        getAssigneeEmails();
-        console.log(assigneeEmails)
+        if (task.assignTo.length > 0) {
+            getAssigneeEmails();
+        }
+        // console.log(assigneeEmails)
     }, []);
 
     useEffect(() => {
@@ -137,6 +144,7 @@ const TaskCard = ({ task, taskType, setEditTask, setIsDialogOpen, setAllTasks, i
 
     return (
         <div className="task-card">
+            {isLoading && <LoadingSpinner asOverlay />}
             <div className="priority-menu">
                 <div className="task-priority">
                     <div className={`small-circle ${task?.priority === 'High' ? 'red-task-card' : task?.priority === 'Moderate' ? 'blue-task-card' : 'green-task-card'}`} />
