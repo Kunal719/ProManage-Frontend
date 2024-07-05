@@ -47,7 +47,7 @@ const AddPeopleDialog = ({ handleDialogClose }) => {
                         </div>
 
                         <div className="dialog-box-btns">
-                            <div className="cancel-button">Cancel</div>
+                            <div className="cancel-button" onClick={handleDialogClose}>Cancel</div>
                             <div className="save-button" onClick={handleSave}>Save</div>
                         </div>
                     </div>
