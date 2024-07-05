@@ -72,6 +72,7 @@ const TaskBoard = ({ taskType, addBtn, tasks, selectedOption }) => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const handleAddButtonClick = () => {
+        setEditTask(null);
         setIsDialogOpen(true); // Open dialog on button click
     };
 
